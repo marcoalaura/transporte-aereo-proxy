@@ -1,0 +1,1328 @@
+{
+  "openapi": "3.0",
+  "info": {
+    "description": "Documentación de los servicios de la Plataforma de Interoperabilidad - AGETIC Transporte Aéreo",
+    "version": "1.0.0",
+    "title": "Interoperabilidad - AGETIC Transporte Aéreo",
+    "page": "https://interoperabilidad.agetic.gob.bo",
+    "x-logo": {
+      "url": "https://agetic.gob.bo/img/svg/logoAgetic_c.svg",
+      "backgroundColor": "transparent"
+    },
+    "contact": {
+      "email": "plataforma-interoperabilidad@agetic.gob.bo"
+    },
+    "licence": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://aereo.oopp.gob.bo/transporte-proxy",
+      "description": "Producción"
+    },
+    {
+      "url": " https://test.agetic.gob.bo/transporte-proxy",
+      "description": "Desarrollo"
+    }
+  ],
+  "tags": [
+    {
+      "name": "ITINERARIOS",
+      "description": "Servicios de ITINERARIOS disponibles para el OPERADOR de Aerolíneas."
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/api/itinerario/crear": {
+      "post": {
+        "tags": [
+          "ITINERARIOS"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Registrar Solicitud de Itinerarios",
+        "description": "Por medio del siguiente servicio los operadoradores o aerolíneas, podrán realizar las solicitudes de itinerarios directamente según rangos de fechas, horarios y días que precisen.",
+        "operationId": "solicitud-itinerario",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa.",
+            "schema": {
+              "$ref": "#/definitions/OP1-mensajePost"
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OP1-mensajePost"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error en el registro de los itinerarios.",
+            "schema": {
+              "$ref": "#/definitions/OP1-errorRegistro"
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OP1-errorRegistro"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "Payload con los datos de itinerario",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/OP1-Itinerario"
+              }
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": "curl -X POST   https://aereo.oopp.gob.bo/transporte-proxy/api/itinerario/crear   -H 'Authorization: Bearer {token}'  -d '{ \n   {\n     \"fecha_inicio\": \"2018-08-22\",\n     \"fecha_fin\": \"2018-08-27\",\n     \"itinerarios\": [\n           {\n           \"eqv\": \"CP-2715\",\n           \"vlo\": \"100\",\n           \"ori\": \"LPB\",\n           \"des\": \"VVI\",\n           \"etd\": \"07:00\",\n           \"eta\": \"08:00\",\n           \"dia\": \"1-2-3-4-5-6\",\n           \"obs\": \"NINGUNA\"\n          },\n          {\n           \"eqv\": \"CP-2762\",\n           \"vlo\": \"101\",\n           \"ori\": \"VVI\",\n           \"des\": \"LPB\",\n           \"etd\": \"07:00\",\n           \"eta\": \"08:00\",\n           \"dia\": \"1-2-3-4-5\",\n           \"obs\": \"NINGUNA\"\n          }\n      ]\n   }\n'\n"
+          }
+        ]
+      }
+    },
+    "/api/itinerario/estado/:idSolicitud": {
+      "get": {
+        "tags": [
+          "ITINERARIOS"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Ver estado de Solicitud de Itinerarios",
+        "description": "Por medio del siguiente servicio los operadoradores o aerolíneas, podrán realizar ver el estado de sus solicitudes de itinerarios a partir del id de solicitud.",
+        "operationId": "estado-solicitud-itinerario",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa.",
+            "schema": {
+              "$ref": "#/definitions/OP1-mensajePostEstado"
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OP1-mensajePostEstado"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error en el registro de los itinerarios.",
+            "schema": {
+              "$ref": "#/definitions/OP1-errorRegistroEstado"
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OP1-errorRegistroEstado"
+                }
+              }
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": "curl -X POST   https://aereo.oopp.gob.bo/transporte-proxy/api/itinerario/estado/:idSolicitud   -H 'Authorization: Bearer {token}'"
+          }
+        ]
+      }
+    },
+    "/api/vuelo/pasajeros": {
+      "post": {
+        "tags": [
+          "VUELOS"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Registro de Pasajeros, Pilotos y Tripulantes",
+        "description": "Por medio del siguiente servicio los operadoradores o aerolíneas, podrán realizar el registro de pilotos, tripulantes y/o pasajeros.",
+        "operationId": "registrar-pasajeros",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa.",
+            "schema": {
+              "$ref": "#/definitions/OP2-mensajePost"
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OP2-mensajePost"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error en el registro de pilotos, tripulantes y pasajeros.",
+            "schema": {
+              "$ref": "#/definitions/OP2-errorRegistro"
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OP2-errorRegistro"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "Payload con los datos de pilotos, tripulantes y pasajeros",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/OP2-Listado"
+              }
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": "curl -X POST   https://aereo.oopp.gob.bo/transporte-proxy/api/vuelo/pasajeros   -H 'Authorization: Bearer {token}'  -d '{ \n   {\n     \"fecha_salida\": \"21/08/2018\",\n     \"hora_salida\": \"07:00\",\n     \"nro_vuelo\": \"105\",\n     \"aeropuerto_salida\": \"VVI\",\n     \"aeropuerto_llegada\": \"LPB\",\n     \"pasajeros\": [\n          {\n           \"tipo\": \"TRIPULANTE\",\n           \"tipo_viajero\": \"\",\n           \"tipo_tripulacion\": \"PILOTO\",\n           \"nro_asiento\": \"\",\n           \"fecha_vencimiento_doc\": \"\",\n           \"entidad_emisora_doc\": \"\",\n           \"lugar_origen\": \"\",\n           \"lugar_destino\": \"\",\n           \"email\": \"\",\n           \"nro_licencia\": \"8034699\",\n           \"nombres\": \"GADIEL\",\n           \"primer_apellido\": \"CAMPOS\",\n           \"segundo_apellido\": \"MALALA\",\n           \"tipo_documento\": \"CI\",\n           \"nro_documento\": \"5591858\",\n           \"fecha_nacimiento\": \"20/12/1995\",\n           \"telefono\": \"\",\n           \"movil\": \"\",\n           \"nacionalidad\": \"BOLIVIANA\",\n           \"pais_nacimiento\": \"BOLIVIA\",\n           \"genero\": \"M\",\n           \"estado\": \"A_BORDO\"\n          },\n          {\n           \"tipo\": \"TRIPULANTE\",\n           \"tipo_viajero\": \"\",\n           \"tipo_tripulacion\": \"TRIPULANTE_DE_CABINA\",\n           \"nro_asiento\": \"\",\n           \"fecha_vencimiento_doc\": \"\",\n           \"entidad_emisora_doc\": \"\",\n           \"lugar_origen\": \"\",\n           \"lugar_destino\": \"\",\n           \"email\": \"\",\n           \"nro_licencia\": \"2738906\",\n           \"nombres\": \"KEILA\",\n           \"primer_apellido\": \"CANDIA\",\n           \"segundo_apellido\": \"\",\n           \"tipo_documento\": \"CI\",\n           \"nro_documento\": \"8907493\",\n           \"fecha_nacimiento\": \"30/06/1984\",\n           \"telefono\": \"\",\n           \"movil\": \"\",\n           \"nacionalidad\": \"BOLIVIANA\",\n           \"pais_nacimiento\": \"BOLIVIA\",\n           \"genero\": \"M\",\n           \"estado\": \"A_BORDO\"\n          },\n          {\n           \"tipo\": \"PASAJERO\",\n           \"tipo_viajero\": \"NACIONAL\",\n           \"tipo_tripulacion\": \"\",\n           \"nro_asiento\": \"12\",\n           \"fecha_vencimiento_doc\": \"10/03/2018\",\n           \"entidad_emisora_doc\": \"SEGIP\",\n           \"lugar_origen\": \"LA PAZ\",\n           \"lugar_destino\": \"SANTA CRUZ\",\n           \"email\": \"olola@gmail.com\",\n           \"nro_licencia\": \"\",\n           \"nombres\": \"OSCAR\",\n           \"primer_apellido\": \"LOLA\",\n           \"segundo_apellido\": \"SAAVEDRA\",\n           \"tipo_documento\": \"CI\",\n           \"nro_documento\": \"5582041\",\n           \"fecha_nacimiento\": \"27/09/1956\",\n           \"telefono\": \"\",\n           \"movil\": \"70585458\",\n           \"nacionalidad\": \"BOLIVIANA\",\n           \"pais_nacimiento\": \"BOLIVIA\",\n           \"genero\": \"M\",\n           \"estado\": \"PAGADO\"\n          }\n      ]\n  }\n'\n"
+          }
+        ]
+      }
+    },
+    "/api/vuelo/actualizar": {
+      "post": {
+        "tags": [
+          "VUELOS"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Cambio del estado de un vuelo",
+        "description": "Por medio del siguiente servicio los operadores o aerolíneas podrán realizar el cambio de estado de un vuelo en particular.",
+        "operationId": "cambio-estado-vuelo",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa.",
+            "schema": {
+              "$ref": "#/definitions/OP3-mensajePost"
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OP3-mensajePost"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error en la actualización del estado del vuelo.",
+            "schema": {
+              "$ref": "#/definitions/OP3-errorRegistro"
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OP3-errorRegistro"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "Payload con los datos de vuelo",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/OP3-Vuelo"
+              }
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": "curl -X POST   https://aereo.oopp.gob.bo/transporte-proxy/api/vuelo/actualizar   -H 'Authorization: Bearer {token}'  -d '{ \n   {\n     \"fecha_salida\": \"21/08/2018\",\n  \"hora_salida\": \"07:00\",\n     \"nro_vuelo\": \"105\",\n     \"aeropuerto_salida\": \"VVI\",\n     \"aeropuerto_llegada\": \"LPB\",\n     \"estado_vuelo\": \"CRUCERO\"\n   }\n'\n"
+          }
+        ]
+      }
+    },    
+    "/api/vuelo/reprogramar": {
+      "post": {
+        "tags": [
+          "VUELOS"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Reprogramar Vuelos",
+        "description": "Mediante el siguiente servicio los operadores o aerolíneas, podrán reprogramar vuelos aprobados introduciendo la nueva hora de salida y aterrizaje seguido del motivo por el que se justifica la reprogramación.",
+        "operationId": "reprogramar-vuelo",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa.",
+            "schema": {
+              "$ref": "#/definitions/OP4-mensajePost"
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OP4-mensajePost"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error en el registro de los itinerarios.",
+            "schema": {
+              "$ref": "#/definitions/OP4-errorRegistro"
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OP4-errorRegistro"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "Payload con los datos de reprogramación del vuelo",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/OP4-VueloReprogramar"
+              }
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": "curl -X POST https://aereo.oopp.gob.bo/transporte-proxy/api/vuelo/reprogramar -H 'authorization: Bearer {token}' -H \"Content-Type: application/json\" -d '{\n\n  \"fecha_salida\": \"24/08/2018\",\n  \"hora_salida\" : \"17:50\", \n  \"hora_aterrizaje\": \"21:05\",\n  \"nro_vuelo\": \"395\",\n  \"aeropuerto_salida\": \"CCA\",\n  \"aeropuerto_llegada\": \"CBB\",\n  \"motivo\": \"Contingencias técnicas\",\n  \"descripcion\": \"Posibles problemas con los neumáticos de las ruedas, se está registrando resultados de revisión preventiva.\"\n}'"
+          }
+        ]
+      }
+    },
+    "/api/vuelo/cancelar": {
+      "post": {
+        "tags": [
+          "VUELOS"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Cancelar Vuelos",
+        "description": "Mediante el siguiente servicio los operadores o aerolíneas, pueden cancelar vuelos aprobados introduciendo el motivo por el que se justifica la cancelación. La cancelación sólo es posible si el vuelo no vuenta con pasajeros",
+        "operationId": "cancelar-vuelo",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa.",
+            "schema": {
+              "$ref": "#/definitions/OP5-mensajePost"
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OP5-mensajePost"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error en el registro de los itinerarios.",
+            "schema": {
+              "$ref": "#/definitions/OP5-errorRegistro"
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OP5-errorRegistro"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "Payload con los datos de reprogramación del vuelo",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/OP5-VueloCancelar"
+              }
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": "curl -X POST https://aereo.oopp.gob.bo/transporte-proxy/api/vuelo/cancelar -H 'authorization: Bearer {token}' -H \"Content-Type: application/json\" -d '{\n  \"fecha_salida\": \"24/08/2018\",\n  \"nro_vuelo\": \"395\",\n  \"aeropuerto_salida\": \"CCA\",\n  \"aeropuerto_llegada\": \"CBB\",\n  \"motivo\": \"Contingencias técnicas\",\n  \"descripcion\": \"Posibles problemas con los neumáticos de las ruedas, se está registrando resultados de revisión correctiva necesaria.\"\n}'"
+          }
+        ]
+      }
+    },
+    "/api/plan/planesVuelosNoRegulares/actualizarEstado/:codPlanVuelo/:estado": {
+      "post": {
+        "tags": [
+          "PLANES DE VUELO NO REGULARES"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Cambiar estado de un plan de vuelos no regular",
+        "description": "Mediante el siguiente servicio aasana, pueden cambiar el estado de los planes de vuelo no regulares a un conjunto de estados definidos",
+        "operationId": "cambiar-estado-plan-vuelo",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa.",
+            "schema": {
+              "$ref": "#/definitions/OP6-mensajePost"
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OP6-mensajePost"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error al cambiar el estado",
+            "schema": {
+              "$ref": "#/definitions/OP5-errorRegistro"
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OP6-errorParametros"
+                }
+              }
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": "curl -X POST https://aereo.oopp.gob.bo/transporte-proxy/api/planesVuelosNoRegulares/actualizarEstado/241/APROBADO -H 'authorization: Bearer {token}' -H \"Content-Type: application/json\" -d '{}'"
+          }
+        ]
+      }
+    },
+    "/api/plan/planesVuelosNoRegulares/ws/consultarEstado/:codPlanVuelo/:codPlanVuelo": {
+      "get": {
+        "tags": [
+          "PLANES DE VUELO NO REGULARES"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Consultar estado de planes de vuelo no regulares",
+        "description": "Mediante el siguiente servicio aasana, pueden consultar sobre el estado de planes de vuelo no regulares por codigo de plan de vuelos",
+        "operationId": "aasana",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa.",
+            "schema": {
+              "$ref": "#/definitions/OP7-mensajePost"
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OP7-mensajePost"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error no se ha encontrado plan de vuelo",
+            "schema": {
+              "$ref": "#/definitions/OP7-errorNotFound"
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OP7-errorNotFound"
+                }
+              }
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": "curl -X GET https://aereo.oopp.gob.bo/transporte-proxy/api/planesVuelosNoRegulares/ws/consultarEstado/301 -H 'Authorization: Bearer {token}'"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "definitions": {
+    "OP1-Estado": {
+      "type": "object",
+      "properties": {
+        "estado": {
+          "type": "string",
+          "description": "Estado de la API REST."
+        }
+      },
+      "example": {
+        "estado": "El servicio se encuentra disponible"
+      }
+    },
+    "OP1-Despliegue": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "versión desplegada de la API REST."
+        }
+      },
+      "example": {
+        "version": "1.0.0"
+      }
+    },
+    "OP1-Error": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "Descripción del error al consumir el servicio web."
+        }
+      },
+      "example": {
+        "error": "Existen otros itinerarios en las fechas y horas solicitadas."
+      }
+    },
+    "OP1-Itinerario": {
+      "type": "object",
+      "properties": {
+        "fecha_inicio": {
+          "type": "date (YYYY-MM-DD)",
+          "description": "Fecha de inicio del itinerario a solicitar. [Requerido]"
+        },
+        "fecha_fin": {
+          "type": "date (YYYY-MM-DD)",
+          "description": "Fecha final del itinerario a solicitar. [Requerido]"
+        },
+        "itinerarios": {
+          "type": "object",
+          "properties": {
+            "eqv": {
+              "type": "string",
+              "description": "Número de matricula de la aeronave, este código tiene el formato 'CP-NNNNNN', esta de acuerdo al registro de la DGAC. [Requerido]"
+            },
+            "vlo": {
+              "type": "string",
+              "description": "Número de vuelo codificado por el aeropuerto. [Requerido]"
+            },
+            "ori": {
+              "type": "string",
+              "description": "Código IATA del aeropuerto de origen. [Requerido]"
+            },
+            "des": {
+              "type": "string",
+              "description": "Código IATA del aeropuerto de destino. [Requerido]"
+            },
+            "etd": {
+              "type": "string",
+              "description": "Hora de despegue solicitada en formato 'HH:MM'. [Requerido]"
+            },
+            "eta": {
+              "type": "string",
+              "description": "Hora de aterrizaje solicitada en formato 'HH:MM'. [Requerido] Se puede complementar el valor +1 junto a la hora para indicar que esta es una hora del día siguiente. Ejemplo: 05:00+1"
+            },
+            "dia": {
+              "type": "string",
+              "description": "Los días solicitados para vuelos bajo el formato '1-2-3-4', donde 1 corresponde al día Lunes y asi los otros días de la semana hasta el código 7. [Requerido]"
+            },
+            "obs": {
+              "type": "string",
+              "description": "Observaciones realizadas en el itinerario solicitado. [Opcional]"
+            }
+          }
+        }
+      },
+      "example": {
+        "fecha_inicio": "2018-08-22",
+        "fecha_fin": "2018-08-27",
+        "itinerarios": [
+          {
+            "eqv": "CP-2715",
+            "vlo": "100",
+            "ori": "LPB",
+            "des": "VVI",
+            "etd": "07:00",
+            "eta": "08:00",
+            "dia": "1-2-3-4-5-6",
+            "obs": "NINGUNA"
+          },
+          {
+            "eqv": "CP-2762",
+            "vlo": "101",
+            "ori": "VVI",
+            "des": "LPB",
+            "etd": "07:00",
+            "eta": "08:00",
+            "dia": "1-2-3-4-5",
+            "obs": "NINGUNA"
+          }
+        ]
+      }
+    },    
+    "OP1-mensajePost": {
+      "type": "object",
+      "properties": {
+        "id_solicitud": {
+          "type": "integer",
+          "description": "Mensaje del estado de la operación."
+        }
+      },
+      "example": {
+        "id_solicitud": "12"
+      }
+    },
+    "OP1-mensajePostEstado": {
+      "type": "object",
+      "properties": {
+        "codigo": {
+          "type": "integer",
+          "description": "Código DGAC de aprobación."
+        },
+        "fecha_inicio": {
+          "type": "date",
+          "description": "Fecha de inicio de la solicitud."
+        },
+        "fecha_fin": {
+          "type": "date",
+          "description": "Fecha final de la solicitud."
+        },
+        "observacion": {
+          "type": "string",
+          "description": "Observación de la solicitud."
+        },
+        "estado": {
+          "type": "string",
+          "description": "Estado de la solicitud."
+        }
+      },
+      "example": {
+        "codigo": null,
+        "fecha_inicio": "2018-08-13",
+        "fecha_fin": "2018-09-02",
+        "observacion": null,
+        "estado": "SOLICITADO"
+      }
+    },
+    "OP1-errorRegistro": {
+      "type": "object",
+      "description": "mensaje de error de validación del payload.",
+      "properties": {
+        "error": {
+          "type": "object",
+          "description": "Descripción del error."
+        }
+      },
+      "example": {
+        "error": "Error ya existe los itinerarios con las fechas y horarios señalados."
+      }
+    },
+    "OP1-errorRegistroEstado": {
+      "type": "object",
+      "description": "mensaje de error de validación del payload.",
+      "properties": {
+        "error": {
+          "type": "object",
+          "description": "Descripción del error."
+        }
+      },
+      "example": {
+        "error": "No existe la solicitud."
+      }
+    },
+    "OP2-Estado": {
+      "type": "object",
+      "properties": {
+        "estado": {
+          "type": "string",
+          "description": "Estado de la API REST."
+        }
+      },
+      "example": {
+        "estado": "El servicio se encuentra disponible"
+      }
+    },
+    "OP2-Despliegue": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "versión desplegada de la API REST."
+        }
+      },
+      "example": {
+        "version": "1.0.0"
+      }
+    },
+    "OP2-Error": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "Descripción del error al consumir el servicio web."
+        }
+      },
+      "example": {
+        "error": "Existen otros itinerarios en las fechas y horas solicitadas."
+      }
+    },
+    "OP2-Listado": {
+      "type": "object",
+      "properties": {
+        "fecha_salida": {
+          "type": "date (DD/MM/YYYY)",
+          "description": "Fecha de salida de la aeronave. [Requerido]"
+        },
+        "hora_salida": {
+          "type": "string",
+          "description": "Hora de salida de la aeronave en formato 'HH:MM'. [Requerido]"
+        },
+        "nro_vuelo": {
+          "type": "string",
+          "description": "Número de vuelo de la aeronave. [Requerido]"
+        },
+        "aeropuerto_salida": {
+          "type": "string",
+          "description": "Código IATA del aeropuerto de salida. [Requerido]"
+        },
+        "aeropuerto_llegada": {
+          "type": "string",
+          "description": "Código IATA del aeropuerto de llegada. [Requerido]"
+        },
+        "pasajeros": {
+          "type": "object",
+          "properties": {
+            "tipo": {
+              "type": "string",
+              "description": "Tipo de persona que aborda la aeronave. [Requerido]",
+              "enum": [
+                "TRIPULANTE",
+                "PASAJERO"
+              ]
+            },
+            "tipo_viajero": {
+              "type": "string",
+              "description": "Número de vuelo codificado por el aeropuerto. [Requerido cuando es de tipo PASAJERO]",
+              "enum": [
+                "NACIONAL",
+                "INTERNACIONAL"
+              ]
+            },
+            "tipo_tripulacion": {
+              "type": "string",
+              "description": "Tipo de tripulación abordo de la aeronave. [Requerido cuando es de tipo TRIPULANTE]",
+              "enum": [
+                "PILOTO",
+                "TRIPULANTE_DE_CABINA"
+              ]
+            },
+            "nro_asiento": {
+              "type": "string",
+              "description": "Número de asiento que ocupa el pasajero en la aeronave. [Requerido cuando es de tipo PASAJERO]"
+            },
+            "fecha_vencimiento_doc": {
+              "type": "date (DD/MM/YYYY)",
+              "description": "Fecha de vencimiento del documento que se registra. [Requerido cuando es de tipo PASAJERO]"
+            },
+            "entidad_emisora_doc": {
+              "type": "string",
+              "description": "Entidad que emitió el documento que se registra. [Requerido cuando es de tipo PASAJERO]"
+            },
+            "lugar_origen": {
+              "type": "string",
+              "description": "Lugar de origen del pasajero, por lo general país de procedencia. [Opcional cuando es de tipo PASAJERO]"
+            },
+            "lugar_destino": {
+              "type": "string",
+              "description": "Lugar destino del pasajero, por lo general la ciudad de destino. [Opcional cuando es de tipo PASAJERO]"
+            },
+            "email": {
+              "type": "string",
+              "description": "Correo electrónico del piloto, tripulante o pasajero que se registra. [Opcional]"
+            },
+            "nro_licencia": {
+              "type": "string",
+              "description": "Número de licencia emitida por la DGAC del piloto o tripulante. [Requerido cuando es de tipo TRIPULANTE]"
+            },
+            "nombres": {
+              "type": "string",
+              "description": "Nombres del piloto, tripulante o pasajero. [Requerido]"
+            },
+            "primer_apellido": {
+              "type": "string",
+              "description": "Primer apellido del piloto, tripulante o pasajero. [Opcional]"
+            },
+            "segundo_apellido": {
+              "type": "string",
+              "description": "Segundo apellido del piloto, tripulante o pasajero. [Opcional]"
+            },
+            "tipo_documento": {
+              "type": "string",
+              "description": "Tipo de documento que se registra. [Requerido]",
+              "enum": [
+                "CI",
+                "PASAPORTE"
+              ]
+            },
+            "nro_documento": {
+              "type": "string",
+              "description": "Número de documento que se registra. [Requerido]"
+            },
+            "fecha_nacimiento": {
+              "type": "date (DD/MM/YYYY)",
+              "description": "Fecha de nacimiento de la persona que se registra. [Requerido]"
+            },
+            "telefono": {
+              "type": "string",
+              "description": "Número de telefono fijo de la persona que se registra. [Opcional]"
+            },
+            "movil": {
+              "type": "string",
+              "description": "Número de telefono celular de la persona que se registra. [Opcional]"
+            },
+            "nacionalidad": {
+              "type": "string",
+              "description": "Nacionalidad de la persona que se registra. [Requerido cuando es de tipo PASAJERO]"
+            },
+            "pais_nacimiento": {
+              "type": "string",
+              "description": "Nombre del país de nacimiento de la persona que se registra. [Requerido]"
+            },
+            "genero": {
+              "type": "string",
+              "description": "Género de la persona que se registra, puedes ser (M)ásculino o (F)emenino. [Requerido]",
+              "enum": [
+                "M",
+                "F"
+              ]
+            },
+            "estado": {
+              "type": "string",
+              "description": "Estado del piloto, tripulante o pasajero, según la actividad u operación que se este realizando en el vuelo.",
+              "enum": [
+                "CHECKING", 
+                "PRE_EMBARQUE", 
+                "A_BORDO", 
+                "VUELO_PERDIDO", 
+                "CANCELADO", 
+                "PAGADO", 
+                "RESERVADO", 
+                "ASIGNADO"
+              ]
+            }
+          }
+        }
+      },
+      "example": {
+        "fecha_salida": "21/08/2018",
+        "hora_salida": "07:00",
+        "nro_vuelo": "105",
+        "aeropuerto_salida": "VVI",
+        "aeropuerto_llegada": "LPB",
+        "pasajeros": [
+          {
+            "tipo": "TRIPULANTE",
+            "tipo_viajero": "",
+            "tipo_tripulacion": "PILOTO",
+            "nro_asiento": "",
+            "fecha_vencimiento_doc": "",
+            "entidad_emisora_doc": "",
+            "lugar_origen": "",
+            "lugar_destino": "",
+            "email": "",
+            "nro_licencia": "8034699",
+            "nombres": "GADIEL",
+            "primer_apellido": "CAMPOS",
+            "segundo_apellido": "MALALA",
+            "tipo_documento": "CI",
+            "nro_documento": "5591850",
+            "fecha_nacimiento": "20/12/1995",
+            "telefono": "",
+            "movil": "",
+            "nacionalidad": "BOLIVIANA",
+            "pais_nacimiento": "BOLIVIA",
+            "genero": "M",
+            "estado": "A_BORDO"
+          },
+          {
+            "tipo": "TRIPULANTE",
+            "tipo_viajero": "",
+            "tipo_tripulacion": "TRIPULANTE_DE_CABINA",
+            "nro_asiento": "",
+            "fecha_vencimiento_doc": "",
+            "entidad_emisora_doc": "",
+            "lugar_origen": "",
+            "lugar_destino": "",
+            "email": "",
+            "nro_licencia": "2738906",
+            "nombres": "KEILA",
+            "primer_apellido": "CANDIA",
+            "segundo_apellido": "",
+            "tipo_documento": "CI",
+            "nro_documento": "8907493",
+            "fecha_nacimiento": "30/06/1984",
+            "telefono": "",
+            "movil": "",
+            "nacionalidad": "BOLIVIANA",
+            "pais_nacimiento": "BOLIVIA",
+            "genero": "M",
+            "estado": "A_BORDO"
+          },
+          {
+            "tipo": "PASAJERO",
+            "tipo_viajero": "NACIONAL",
+            "tipo_tripulacion": "",
+            "nro_asiento": "12",
+            "fecha_vencimiento_doc": "10/03/2018",
+            "entidad_emisora_doc": "SEGIP",
+            "lugar_origen": "",
+            "lugar_destino": "",
+            "email": "olola@gmail.com",
+            "nro_licencia": "",
+            "nombres": "OSCAR",
+            "primer_apellido": "LOLA",
+            "segundo_apellido": "SAAVEDRA",
+            "tipo_documento": "CI",
+            "nro_documento": "5582041",
+            "fecha_nacimiento": "27/09/1956",
+            "telefono": "",
+            "movil": "70585458",
+            "nacionalidad": "BOLIVIANA",
+            "pais_nacimiento": "BOLIVIA",
+            "genero": "M",
+            "estado": "PAGADO"
+          }
+        ]
+      }
+    },
+    "OP2-mensajePost": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "description": "Estado de la operación."
+        }
+      },
+      "example": {
+        "success": "true"
+      }
+    },
+    "OP2-errorRegistro": {
+      "type": "object",
+      "description": "mensaje de error de validación del payload.",
+      "properties": {
+        "error": {
+          "type": "object",
+          "description": "Descripción del error."
+        }
+      },
+      "example": {
+        "error": "No existe el vuelo solicitado."
+      }
+    },
+    "OP3-Estado": {
+      "type": "object",
+      "properties": {
+        "estado": {
+          "type": "string",
+          "description": "Estado de la API REST."
+        }
+      },
+      "example": {
+        "estado": "El servicio se encuentra disponible"
+      }
+    },
+    "OP3-Despliegue": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "versión desplegada de la API REST."
+        }
+      },
+      "example": {
+        "version": "1.0.0"
+      }
+    },
+    "OP3-Error": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "Descripción del error al consumir el servicio web."
+        }
+      },
+      "example": {
+        "error": "No existe el vuelo solicitado."
+      }
+    },
+    "OP3-Vuelo": {
+      "type": "object",
+      "properties": {
+        "fecha_salida": {
+          "type": "date (DD/MM/YYYY)",
+          "description": "Fecha de salida de la aeronave. [Requerido]"
+        },
+        "hora_salida": {
+          "type": "string",
+          "description": "Hora de salida de la aeronave en formato 'HH:MM'. [Requerido]"
+        },
+        "nro_vuelo": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Número de vuelo de la aeronave. [Requerido]"
+        },
+        "aeropuerto_salida": {
+          "type": "string",
+          "description": "Código IATA del aeropuerto de salida. [Requerido]"
+        },
+        "aeropuerto_llegada": {
+          "type": "string",
+          "description": "Código IATA del aeropuerto de llegada. [Requerido]"
+        },
+        "estado_vuelo": {
+          "type": "string",
+          "description": "Estado del vuelo seleccionado. [Requerido]",
+          "enum": [
+            "CONFIRMADO", 
+            "EN_HORARIO", 
+            "NUEVA_HORA", 
+            "PRE_EMBARQUE", 
+            "PREEMBARCANDO", 
+            "ABORDANDO", 
+            "CERRADO", 
+            "EN_TIERRA", 
+            "INFORMES", 
+            "DEMORADO", 
+            "ARRIBO", 
+            "CANCELADO", 
+            "RODAJE", 
+            "DESPEGUE", 
+            "ASCENSO", 
+            "CRUCERO", 
+            "DESCENSO", 
+            "APROXIMACION", 
+            "ATERRIZAJE"
+          ]
+        }
+      },
+      "example": {
+        "fecha_salida": "20/08/2018",
+        "hora_salida": "07:00",
+        "nro_vuelo": "101",
+        "aeropuerto_salida": "VVI",
+        "aeropuerto_llegada": "LPB",
+        "estado_vuelo": "CRUCERO"
+      }
+    },
+    "OP3-mensajePost": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "description": "Estado de la operación."
+        }
+      },
+      "example": {
+        "success": "true"
+      }
+    },
+    "OP3-errorRegistro": {
+      "type": "object",
+      "description": "mensaje de error de validación del payload.",
+      "properties": {
+        "error": {
+          "type": "object",
+          "description": "Descripción del error."
+        }
+      },
+      "example": {
+        "error": "No existe el vuelo solicitado."
+      }
+    },
+    "OP4-mensajePost": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "description": "Estado de la operación."
+        }
+      },
+      "example": {
+        "success": "true"
+      }
+    },
+    "OP4-errorRegistro": {
+      "type": "object",
+      "description": "mensaje de error de validación del payload.",
+      "properties": {
+        "error": {
+          "type": "object",
+          "description": "Descripción del error."
+        }
+      },
+      "example": {
+        "error": "No existe el vuelo solicitado."
+      }
+    },    
+    "OP4-VueloReprogramar": {
+      "type": "object",
+      "properties": {
+        "fecha_salida": {
+          "type": "date (YYYY/MM/DD)",
+          "description": "Fecha de salida del vuelo a reprogramar. [Requerido]"
+        },
+        "hora_salida": {
+          "type": "time (hh:mm)",
+          "description": "Hora del día a la que se reprograma la salida del vuelo. [Requerido]"
+        },
+        "hora_aterrizaje": {
+          "type": "time (hh:mm)",
+          "description": "Hora del día a la que se reprograma el aterrizaje del vuelo. [Requerido]"
+        },
+        "nro_vuelo": {
+          "type": "string",
+          "description": "Número de vuelo. [Requerido]"
+        },
+        "aeropuerto_salida": {
+          "type": "string",
+          "description": "Código IATA del aeropuerto de salida. [Requerido]"
+        },
+        "aeropuerto_llegada": {
+          "type": "string",
+          "description": "Código IATA del aeropuerto de destino. [Requerido]"
+        },
+        "motivo": {
+          "type": "string",
+          "description": "Motivo por el cual se reprograma el vuelo. [Requerido]",
+          "enum": [
+            "Problemas meteorológicos",
+            "Conmociones sociales",
+            "Actos de terrorismo o sabotaje",
+            "Accidentes en infraestructuras que interfieran las operaciones",
+            "Restricciones",
+            "Contingencias técnicas",
+            "Otros"
+          ]
+        },
+        "descripcion": {
+          "type": "string",
+          "description": "Justificación textual de la reprogramación del vuelo. [Requerido]"
+        }
+      },
+      "example": {
+        "fecha_salida": "24/08/2018",
+        "hora_salida" : "17:50",
+        "hora_aterrizaje": "21:05",
+        "nro_vuelo": "395",
+        "aeropuerto_salida": "CCA",
+        "aeropuerto_llegada": "CBB",
+        "motivo": "Contingencias técnicas",
+        "descripcion": "Posibles problemas con los neumáticos de las ruedas, se está registrando resultados de revisión preventiva."
+      }
+    },
+    "OP5-mensajePost": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "description": "Estado de la operación."
+        }
+      },
+      "example": {
+        "success": "true"
+      }
+    },
+    "OP5-errorRegistro": {
+      "type": "object",
+      "description": "mensaje de error de validación del payload.",
+      "properties": {
+        "error": {
+          "type": "object",
+          "description": "Descripción del error."
+        }
+      },
+      "example": {
+        "error": "No existe el vuelo solicitado."
+      }
+    },
+    "OP5-VueloCancelar": {
+      "type": "object",
+      "properties": {
+        "fecha_salida": {
+          "type": "date (YYYY/MM/DD)",
+          "description": "Fecha de salida del vuelo a cancelar. [Requerido]"
+        },
+        "hora_salida": {
+          "type": "time (hh:mm)",
+          "description": "Hora del día a la que se cancela la salida del vuelo. [Requerido]"
+        },
+        "hora_aterrizaje": {
+          "type": "time (hh:mm)",
+          "description": "Hora del día a la que se cancelar el aterrizaje del vuelo. [Requerido]"
+        },
+        "nro_vuelo": {
+          "type": "string",
+          "description": "Número de vuelo. [Requerido]"
+        },
+        "aeropuerto_salida": {
+          "type": "string",
+          "description": "Código IATA del aeropuerto de salida. [Requerido]"
+        },
+        "aeropuerto_llegada": {
+          "type": "string",
+          "description": "Código IATA del aeropuerto de destino. [Requerido]"
+        },
+        "motivo": {
+          "type": "string",
+          "description": "Motivo por el cual se cancela el vuelo. [Requerido]",
+          "enum": [
+            "Problemas meteorológicos",
+            "Conmociones sociales",
+            "Actos de terrorismo o sabotaje",
+            "Accidentes en infraestructuras que interfieran las operaciones",
+            "Restricciones",
+            "Contingencias técnicas",
+            "Otros"
+          ]
+        },
+        "descripcion": {
+          "type": "string",
+          "description": "Justificación textual de la cancelación del vuelo. [Requerido]"
+        }
+      },
+      "example": {
+        "fecha_salida": "24/08/2018",
+        "nro_vuelo": "395",
+        "aeropuerto_salida": "CCA",
+        "aeropuerto_llegada": "CBB",
+        "motivo": "Contingencias técnicas",
+        "descripcion": "Posibles problemas con los neumáticos de las ruedas, se está registrando resultados de revisión correctiva necesaria."
+      }
+    },
+    "OP6-errorParametros": {
+      "type": "object",
+      "description": "mensaje de error de validación de parametros.",
+      "properties": {
+        "error": {
+          "type": "object",
+          "description": "Descripción del error."
+        }
+      },
+      "example": {
+        "error": "Error de validación de parametros, no se ha encontrado el plan de vuelos"
+      }
+    },
+    "OP6-mensajePost": {
+      "type": "object",
+      "description": "Operación exitosa.",
+      "properties": {
+        "success": {
+          "type": "object",
+          "description": "Operación exitosa"
+        }
+      },
+      "example": {
+        "success": "true"
+      }
+    },
+    "OP7-mensajePost": {
+      "type": "object",
+      "description": "Operación exitosa.",
+      "properties": {
+        "success": {
+          "type": "object",
+          "description": "Operación exitosa"
+        }
+      },
+      "example": {
+        "estado": "RECHAZADO",
+        "fecha_actualizacion": "2018-08-24T14:44:17.484Z",
+         "usuario": "felcnCBB"
+      }
+    },
+    "OP7-errorNotFound": {
+      "type": "object",
+      "description": "No se ha encontrado plan de vuelo.",
+      "properties": {
+        "error": {
+          "type": "object",
+          "description": "No se ha encontrado plan de vuelo"
+        }
+      },
+      "example": {
+        "error": "No se ha encontrado el plan FPL con codigo 48:"
+      }
+    }
+  }
+}
